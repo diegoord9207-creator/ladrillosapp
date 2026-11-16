@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#10b981">
+  <title>EcoLadrillos Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f0fdf4;
+      --card: #ffffff;
+      --ink: #0f172a;
+      --muted: #475569;
+      --primary: #059669;
+      --primary-dark: #047857;
+      --accent: #f59e0b;
+      --ok-bg: #dcfce7;
+      --ok-border: #16a34a;
+      --ok-text: #14532d;
+      --bad-bg: #fee2e2;
+      --bad-border: #dc2626;
+      --bad-text: #7f1d1d;
+      --mid-bg: #fef3c7;
+      --mid-border: #d97706;
+      --mid-text: #78350f;
+      --border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background: #e2e8f0;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Outfit', sans-serif;
+      margin: 0 0 0.4em;
+      line-height: 1.15;
+    }
+
+    #app {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(180deg, #ecfdf5 0%, #f8fafc 45%, #f1f5f9 100%);
+    }
+
+    /* Header estilo App moderna */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: linear-gradient(135deg, #065f46 0%, #059669 100%);
+      color: #fff;
+      padding: calc(env(safe-area-inset-top) + 14px) 18px 14px;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      box-shadow: 0 4px 15px rgba(5, 150, 105, 0.25);
+    }
+
+    .hr {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: -0.02em;
+    }
+
+    .step-pill {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      backdrop-filter: blur(4px);
+    }
+
+    .meter-wrap {
+      margin-top: 10px;
+    }
+
+    .meter-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #d1fae5;
+    }
+
+    .mt {
+      height: 10px;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 999px;
+      overflow: hidden;
+      padding: 2px;
+    }
+
+    .mt i {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, #fbbf24, #34d399);
+      border-radius: 999px;
+      transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    main {
+      padding: 18px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Tarjetas e imágenes */
+    .hero-img-wrap {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.1);
+    }
+
+    .hero-img-wrap img {
+      width: 100%;
+      height: 195px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .badge-tag {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(15, 23, 42, 0.78);
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 8px;
+      backdrop-filter: blur(4px);
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 18px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+      border: 1px solid var(--border);
+      margin-bottom: 14px;
+      animation: fadeUp 0.35s ease;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .q-title {
+      font-size: 1.35rem;
+      color: #064e3b;
+    }
+
+    .q-text {
+      font-size: 0.98rem;
+      color: #334155;
+      margin: 0;
+    }
+
+    /* Botones de opciones */
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+    }
+
+    .o {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      text-align: left;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: var(--card);
+      border: 2px solid var(--border);
+      color: var(--ink);
+      font-size: 0.95rem;
+      font-weight: 600;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    }
+
+    .o:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: #f0fdf4;
+      transform: translateY(-1px);
+    }
+
+    .o:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    .opt-letter {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      background: #f1f5f9;
+      color: #475569;
+      display: grid;
+      place-items: center;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    .o:disabled { cursor: default; }
+    .o.c { background: var(--ok-bg); border-color: var(--ok-border); color: var(--ok-text); }
+    .o.c .opt-letter { background: var(--ok-border); color: #fff; }
+    .o.w { background: var(--bad-bg); border-color: var(--bad-border); color: var(--bad-text); }
+    .o.w .opt-letter { background: var(--bad-border); color: #fff; }
+    .o.m { background: var(--mid-bg); border-color: var(--mid-border); color: var(--mid-text); }
+    .o.m .opt-letter { background: var(--mid-border); color: #fff; }
+
+    /* Botón principal */
+    .p {
+      width: 100%;
+      padding: 16px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      box-shadow: 0 6px 16px rgba(5, 150, 105, 0.3);
+      margin-top: 8px;
+    }
+
+    .p:hover { filter: brightness(1.05); }
+    .p:active { transform: scale(0.98); }
+
+    /* Feedback */
+    .fb {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      margin: 14px 0 8px;
+      font-size: 0.94rem;
+      animation: fadeUp 0.3s ease;
+    }
+
+    .fb.good { border-color: var(--ok-border); background: #f0fdf4; }
+    .fb.bad { border-color: var(--bad-border); background: #fef2f2; }
+    .fb.mid { border-color: var(--mid-border); background: #fffbeb; }
+
+    .pts-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 800;
+      font-size: 0.82rem;
+      margin-right: 6px;
+    }
+    .good .pts-pill { background: var(--ok-border); color: #fff; }
+    .bad .pts-pill { background: var(--bad-border); color: #fff; }
+    .mid .pts-pill { background: var(--mid-border); color: #fff; }
+
+    /* Pantalla final */
+    .result-box {
+      text-align: center;
+      padding: 22px 16px;
+    }
+    .rank-emoji { font-size: 3.2rem; display: block; margin-bottom: 4px; }
+    .sc {
+      font-family: 'Outfit', sans-serif;
+      font-size: 3.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1;
+      margin: 6px 0;
+    }
+    .rank-title {
+      display: inline-block;
+      background: #d1fae5;
+      color: #065f46;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+
+    .li {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+    .mu { color: var(--muted); font-size: 0.85rem; }
+
+    /* Marco de celular en PC */
+    @media (min-width: 700px) {
+      body {
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+        background: radial-gradient(circle at top, #cbd5e1, #94a3b8);
+        padding: 20px;
+      }
+      #app {
+        width: 395px;
+        height: 800px;
+        min-height: 0;
+        border: 12px solid #0f172a;
+        border-radius: 42px;
+        overflow-y: auto;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="hr">
+      <div class="logo">🌱 EcoLadrillos Lab</div>
+      <span class="step-pill" id="st">Inicio</span>
+    </div>
+    <div class="meter-wrap">
+      <div class="meter-labels">
+        <span>Señal ecológica</span>
+        <span id="lb">40 / 100</span>
+      </div>
+      <div class="mt" role="progressbar" aria-label="Señal ecológica">
+        <i id="mt" style="width:40%"></i>
+      </div>
+    </div>
+  </header>
+  <main id="m"></main>
+</div>
+
+<script>
+const IM = 'imagenes/';
+const LETTERS = ['A', 'B', 'C'];
+
+const D = [
+  {
+    im: 'estiercol_3.jpg',
+    alt: 'Dosificación de materiales',
+    tag: 'Paso 1 · Materia prima',
+    t: 'La calidad de la tierra y componentes',
+    q: 'Inspeccionas los agregados y la materia orgánica base para tus bloques. Al mezclarla notas que la textura necesita mejor cohesión. ¿Qué acción tomas?',
+    o: [
+      [ 'Integrar una dosificación adecuada de arcilla o aglutinante para dar cohesión', 10, '¡Exacto! La proporción correcta asegura que el bloque mantenga su estabilidad estructural.' ],
+      [ 'Usarla tal cual sin tamizar ni ajustar proporciones', -10, 'Una tierra desbalanceada genera grietas y fallas mecánicas al secarse.' ],
+      [ 'Saturar completamente la mezcla con agua líquida', 0, 'El exceso de agua debilita el material y genera contracción excesiva.' ]
+    ]
+  },
+  {
+    im: 'cemento2.jpg',
+    alt: 'Mezcla con cemento',
+    tag: 'Paso 2 · Estabilización',
+    t: 'La dosis de cemento y aglutinantes',
+    q: 'El cemento estabiliza la pieza, pero su huella de carbono es alta. ¿Cómo defines su uso en la mezcla?',
+    o: [
+      [ 'Una proporción justa y controlada para estabilizar la mezcla sin perder el enfoque ecológico', 10, '¡Gran equilibrio! Aprovechas la resistencia justa sin descuidar el perfil sostenible.' ],
+      [ 'Vaciar sacos enteros para asegurar máxima dureza', -10, 'Exceder el cemento incrementa el impacto ambiental y convierte el bloque en uno convencional.' ],
+      [ 'Omitir por completo cualquier aglutinante', 0, 'Sin estabilizante, la resistencia ante la humedad se reduce drásticamente.' ]
+    ]
+  },
+  {
+    im: 'ladrillos_con_cascara_arroz.jpg',
+    alt: 'Ecoladrillos con cascarilla de arroz',
+    tag: 'Paso 3 · Economía circular',
+    t: 'Aprovechamiento de subproductos',
+    q: 'Dispones de cascarilla de arroz y biomasa local para aligerar el peso de los ecoladrillos. ¿Cómo procedes?',
+    o: [
+      [ 'Incorporarlas de forma homogénea a la mezcla aplicando buenas prácticas de manipulación', 10, '¡Excelente! Reutilizas residuos locales, aligeras el bloque y enriqueces el diseño.' ],
+      [ 'Comprar aditivos sintéticos costosos en el mercado', 0, 'Aunque sirven, desaprovechas los residuos orgánicos locales que ya tienes disponibles.' ],
+      [ 'Descartar la biomasa y quemarla al aire libre', -10, 'La quema de residuos contamina el entorno y desperdicia materia prima valiosa.' ]
+    ]
+  },
+  {
+    im: 'mezcla.jpg',
+    alt: 'Mezcla homogénea de los ecoladrillos',
+    tag: 'Paso 4 · Curado y secado',
+    t: 'El proceso de curado del bloque',
+    q: 'Tus ecoladrillos acaban de ser moldeados y desmoldados. ¿En qué condiciones realizas el secado?',
+    o: [
+      [ 'Bajo sombra, con buena ventilación y manteniendo humedad controlada los primeros días', 10, '¡Muy bien! Un curado lento y protegido previene fisuras y asegura fraguado óptimo.' ],
+      [ 'Exponerlos directamente al sol fuerte del mediodía', -10, 'El secado demasiado rápido evapora el agua abruptamente y fractura la pieza.' ],
+      [ 'Envolverlos en plástico sellado sin ventilación', 0, 'Encerrarlos por completo impide la evaporación gradual necesaria.' ]
+    ]
+  },
+  {
+    im: 'despues_del_tamizado.jpg',
+    alt: 'Material después del tamizado',
+    tag: 'Paso 5 · Control de calidad',
+    t: 'Verificación y pruebas del prototipo',
+    q: 'Tras el tiempo de curado, necesitas evaluar las características físicas del bloque antes de presentarlo.',
+    o: [
+      [ 'Registrar dimensiones, peso, densidad y resistencia a compresión simple', 10, '¡Mentalidad científica! Los datos cuantitativos permiten validar y optimizar la fórmula.' ],
+      [ 'Golpearlo fuertemente con un martillo metálico', -10, 'Un impacto destructivo sin control solo arruina tu muestra de trabajo.' ],
+      [ 'Juzgarlo únicamente por su apariencia superficial a simple vista', 0, 'La estética exterior no garantiza la integridad estructural interna.' ]
+    ]
+  },
+  {
+    im: 'ladrillo_ecologico.jpg',
+    alt: 'Ladrillo ecológico final',
+    tag: 'Paso 6 · Divulgación',
+    t: 'Presentación final del proyecto',
+    q: 'Llega la muestra institucional y pedagógica. ¿Cómo comunicas los resultados obtenidos?',
+    o: [
+      [ 'Como un prototipo educativo sostenible, detallando el proceso metodológico y sus alcances', 10, '¡Rigor y claridad! Comunicas los hallazgos de forma honesta y fundamentada.' ],
+      [ 'Afirmar que está certificado para construir edificios de gran altura', -10, 'Aseverar esto sin ensayos estructurales normados es incorrecto y riesgoso.' ],
+      [ 'Exponer las piezas en la mesa sin ninguna ficha técnica ni explicación', 0, 'Sin contextualizar el proceso, el sentido pedagógico de la muestra se pierde.' ]
+    ]
+  }
+];
+
+let i = -1, sc = 40, H = [], ans = false, best = 0;
+try { best = +localStorage.getItem('ecb2') || 0; } catch (e) {}
+const $ = s => document.querySelector(s);
+
+function bar() {
+  const pct = Math.max(0, Math.min(100, sc));
+  $('#mt').style.width = pct + '%';
+  $('#lb').textContent = `${sc} / 100 pts`;
+  $('#st').textContent = i < 0 ? 'Reto' : i >= D.length ? 'Completado' : `Paso ${i + 1}/${D.length}`;
+}
+
+function draw() {
+  bar();
+  const m = $('#m');
+
+  if (i < 0) {
+    m.innerHTML = `
+      <div class="hero-img-wrap">
+        <img src="${IM}imagen_portada.jpg" alt="Portada del proyecto EcoLadrillos Educativos">
+        <span class="badge-tag">🧪 Simulador Interactivo · 6 Retos</span>
+      </div>
+      <div class="card">
+        <h1>Construye tu Ecoladrillo</h1>
+        <p class="q-text">Toma <b>6 decisiones clave</b> desde la selección de materiales hasta la muestra pedagógica. Cada elección ajusta tu <b>señal ecológica</b> (inicias en 40 pts).</p>
+        <p class="mu" style="margin-top:10px">💡 Simulación orientada a fomentar el criterio ambiental y el método científico.</p>
+      </div>
+      <button class="p" onclick="i=0;draw()">🚀 Comenzar simulación</button>
+      ${best ? `<p class="mu" style="text-align:center;margin-top:10px">🏆 Tu récord personal: <b>${best} pts</b></p>` : ''}
+    `;
+    return;
+  }
+
+  if (i >= D.length) {
+    let emoji = '🌱', rank = 'Explorador en Formación', msg = 'Buen intento. Revisa los detalles de cada fase para fortalecer la formulación y el rigor del proceso.';
+    if (sc >= 90) {
+      emoji = '🏆'; rank = 'Maestro Eco-Constructor';
+      msg = '¡Impecable! Integraste sostenibilidad, buenas prácticas de curado y rigor científico en cada etapa.';
+    } else if (sc >= 65) {
+      emoji = '🌿'; rank = 'Innovador Sostenible';
+      msg = '¡Excelente desempeño! Tomaste muy buenas decisiones técnicas a lo largo del recorrido.';
+    }
+
+    m.innerHTML = `
+      <div class="card result-box">
+        <span class="rank-emoji">${emoji}</span>
+        <span class="rank-title">${rank}</span>
+        <div class="sc">${sc} <span style="font-size:1.2rem;color:var(--muted)">pts</span></div>
+        <p class="q-text" style="margin-top:8px">${msg}</p>
+      </div>
+      <h3 style="margin:6px 4px 10px;font-size:1.05rem">📋 Resumen de tus decisiones</h3>
+      ${H.map((h, k) => `
+        <div class="li">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+            <b>${k + 1}. ${D[k].t}</b>
+            <span style="font-weight:700;color:${h[1] === 10 ? '#16a34a' : h[1] < 0 ? '#dc2626' : '#d97706'}">
+              ${h[1] > 0 ? '+10' : h[1]} pts
+            </span>
+          </div>
+          <div style="color:#334155;margin-bottom:4px">${h[0]}</div>
+          <span class="mu">${h[1] === 10 ? '✅ Elección óptima' : '💡 Ideal: ' + h[4]}</span>
+        </div>
+      `).join('')}
+      <button class="p" onclick="i=-1;sc=40;H=[];draw();$('#app').scrollTop=0">🔄 Volver a intentar</button>
+    `;
+    return;
+  }
+
+  const d = D[i];
+  ans = false;
+  m.innerHTML = `
+    <div class="hero-img-wrap">
+      <img src="${IM}${d.im}" alt="${d.alt}">
+      <span class="badge-tag">${d.tag}</span>
+    </div>
+    <div class="card">
+      <h2 class="q-title">${d.t}</h2>
+      <p class="q-text">${d.q}</p>
+    </div>
+    <div class="options-list" id="os">
+      ${d.o.map((o, k) => `
+        <button class="o" onclick="pk(${k})">
+          <span class="opt-letter">${LETTERS[k]}</span>
+          <span>${o[0]}</span>
+        </button>
+      `).join('')}
+    </div>
+    <div id="fb" role="status"></div>
+  `;
+}
+
+function pk(k) {
+  if (ans) return;
+  ans = true;
+  const d = D[i], o = d.o[k], bs = d.o.find(x => x[1] == 10)[0];
+  sc += o[1];
+  H.push([o[0], o[1], o[2], o[1], bs]);
+
+  document.querySelectorAll('#os .o').forEach((b, j) => {
+    b.disabled = true;
+    b.className = 'o ' + (d.o[j][1] == 10 ? 'c' : j == k ? (d.o[j][1] < 0 ? 'w' : 'm') : '');
+  });
+
+  bar();
+  const last = i == D.length - 1;
+  if (last) {
+    try { if (sc > best) { best = sc; localStorage.setItem('ecb2', sc); } } catch (e) {}
+  }
+
+  const stateClass = o[1] > 0 ? 'good' : o[1] < 0 ? 'bad' : 'mid';
+  const ptsText = o[1] > 0 ? '+10 pts' : o[1] < 0 ? '−10 pts' : '0 pts';
+
+  $('#fb').innerHTML = `
+    <div class="fb ${stateClass}">
+      <span class="pts-pill">${ptsText}</span>
+      <span>${o[2]}</span>
+    </div>
+    <button class="p" onclick="i++;draw();window.scrollTo(0,0);$('#app').scrollTop=0">
+      ${last ? '🏁 Ver mi puntaje final' : 'Continuar al siguiente paso →'}
+    </button>
+  `;
+  $('#fb').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+draw();
+</script>
+</body>
+</html>
